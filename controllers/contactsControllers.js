@@ -1,4 +1,8 @@
 const contactsService = require("../services/contactsServices.js");
+const {
+  createContactSchema,
+  updateContactSchema,
+} = require("../schemas/contactsSchemas.js");
 
 exports.getAllContacts = async (req, res) => {
   const contacts = await contactsService.listContacts();
@@ -6,13 +10,34 @@ exports.getAllContacts = async (req, res) => {
 };
 
 exports.getOneContact = async (req, res) => {
-  const contact = await contactsService.getContactById();
+  const contact = await contactsService.getContactById(req.params.id);
 
   if (contact) return res.status(200).json(contact);
+
+  res.status(404).send({ message: "Not found" });
 };
 
-exports.deleteContact = async (req, res) => {};
+exports.deleteContact = async (req, res) => {
+  const deletedContact = await contactsService.removeContact(req.params.id);
 
-exports.createContact = async (req, res) => {};
+  if (!deletedContact) return res.status(404).send({ message: "Not found" });
 
-exports.updateContact = async (req, res) => {};
+  res.status(200).send(deletedContact);
+};
+
+exports.createContact = async (req, res) => {
+  const { value: body, error } = createContactSchema.validate(req.body);
+
+  if (error) return res.status(400).json({ message: error.message });
+
+  const newContact = await contactsService.addContact(body);
+
+  res.status(201).json(newContact);
+};
+
+exports.updateContact = async (req, res) => {
+  const { value, error } = updateContactSchema.validate(req.body);
+
+  if (error) return res.status(400).json({ message: error.message });
+  res.send("test");
+};
