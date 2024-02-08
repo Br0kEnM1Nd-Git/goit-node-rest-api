@@ -74,6 +74,24 @@ async function addContact({ name, email, phone }) {
   return newUser;
 }
 
+async function updateContact(contactId, newBody) {
+  const contacts = await listContacts();
+
+  const foundContactIndex = contacts.findIndex(({ id }) => {
+    if (id === contactId) return true;
+    return false;
+  });
+
+  if (foundContactIndex < 0) return null;
+
+  contacts[foundContactIndex] = { ...contacts[foundContactIndex], ...newBody };
+
+  const data = JSON.stringify(contacts);
+  await writeFile(contactsPath, data);
+
+  return contacts[foundContactIndex];
+}
+
 module.exports = {
   contactsPath,
   readFile,
@@ -82,4 +100,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };

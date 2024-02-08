@@ -36,8 +36,16 @@ exports.createContact = async (req, res) => {
 };
 
 exports.updateContact = async (req, res) => {
-  const { value, error } = updateContactSchema.validate(req.body);
+  const { value: body, error } = updateContactSchema.validate(req.body);
 
   if (error) return res.status(400).json({ message: error.message });
-  res.send("test");
+
+  const updatedContact = await contactsService.updateContact(
+    req.params.id,
+    body
+  );
+
+  if (!updatedContact) return res.status(404).json({ message: "Not found" });
+
+  res.status(200).json(updatedContact);
 };
