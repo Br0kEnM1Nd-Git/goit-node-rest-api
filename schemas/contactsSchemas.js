@@ -21,9 +21,6 @@ exports.createContactSchema = Joi.object({
     "string.max": `Phone should have a maximum length of {#limit}`,
     "any.required": `Phone is a required field`,
   }),
-  favorite: Joi.boolean().messages({
-    "boolean.base": `Favorite should be a type of 'boolean'`,
-  }),
 });
 
 exports.updateContactSchema = Joi.object({
@@ -44,9 +41,13 @@ exports.updateContactSchema = Joi.object({
     "string.min": `Phone should have a minimum length of {#limit}`,
     "string.max": `Phone should have a maximum length of {#limit}`,
   }),
-  favorite: Joi.boolean().messages({
-    "boolean.base": `Favorite should be a type of 'boolean'`,
-  }),
 })
   .min(1)
   .messages({ "object.min": `Body must have at least one field` });
+
+exports.updateStatusContactSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "boolean.base": `Favorite should be a type of 'boolean'`,
+    "any.required": `Favorite is a required field`,
+  }),
+});

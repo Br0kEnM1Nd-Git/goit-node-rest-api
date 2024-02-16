@@ -5,11 +5,13 @@ const {
   deleteContact,
   createContact,
   updateContact,
+  updateStatusContact,
 } = require("../controllers/contactsControllers.js");
 
 const {
   createContactSchema,
   updateContactSchema,
+  updateStatusContactSchema,
 } = require("../schemas/contactsSchemas.js");
 const validateBody = require("../middlewares/validateBody.js");
 const validateId = require("../middlewares/validateId.js");
@@ -27,5 +29,9 @@ contactsRouter
   .get(getOneContact)
   .delete(deleteContact)
   .put(validateBody(updateContactSchema), updateContact);
+
+contactsRouter
+  .route("/:id/favorite")
+  .patch(validateBody(updateStatusContactSchema), updateStatusContact);
 
 module.exports = contactsRouter;
