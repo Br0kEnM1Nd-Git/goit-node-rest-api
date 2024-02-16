@@ -53,11 +53,5 @@ exports.updateStatusContact = catchAsync(async (req, res) => {
 
   if (!updatedContact) return res.status(404).json({ message: "Not found" });
 
-  res
-    .status(200)
-    .json({
-      message: updatedContact.favorite
-        ? "Contact added to favorites"
-        : "Contact removed from favorites",
-    });
+  res.status(200).json(updatedContact);
 });
