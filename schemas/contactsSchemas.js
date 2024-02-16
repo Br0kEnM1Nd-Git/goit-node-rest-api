@@ -14,7 +14,7 @@ exports.createContactSchema = Joi.object({
     "string.email": "Email is not valid",
     "any.required": `Email is a required field`,
   }),
-  phone: Joi.string().empty().min(7).max(12).required().messages({
+  phone: Joi.string().empty().min(10).max(10).required().messages({
     "string.base": `Phone should be a type of 'text'`,
     "string.empty": `Phone cannot be an empty field`,
     "string.min": `Phone should have a minimum length of {#limit}`,
@@ -35,7 +35,7 @@ exports.updateContactSchema = Joi.object({
     "string.empty": `Email cannot be an empty field`,
     "string.email": "Email is not valid",
   }),
-  phone: Joi.string().empty().min(7).max(12).messages({
+  phone: Joi.string().empty().min(10).max(10).messages({
     "string.base": `Phone should be a type of 'text'`,
     "string.empty": `Phone cannot be an empty field`,
     "string.min": `Phone should have a minimum length of {#limit}`,
