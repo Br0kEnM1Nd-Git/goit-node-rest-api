@@ -1,25 +1,3 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-
-const contactsPath = path.join("db", "contacts.json");
-
-const readFile = async (path) => {
-  try {
-    const resp = await fs.readFile(path);
-    return resp;
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
-};
-
-const writeFile = async (path, data) => {
-  try {
-    await fs.writeFile(path, data);
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
-};
 
 async function listContacts() {
   const buffer = await readFile(contactsPath);
