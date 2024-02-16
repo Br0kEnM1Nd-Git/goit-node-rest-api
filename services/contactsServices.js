@@ -1,79 +1,37 @@
+const Contacts = require("../models/contactsModel");
 
 async function listContacts() {
-  const buffer = await readFile(contactsPath);
-  const contactsList = JSON.parse(buffer);
-  return contactsList;
+  return Contacts.find();
 }
 
 async function getContactById(contactId) {
-  const contacts = await listContacts();
+  const contact = await Contacts.findById(contactId);
 
-  const foundContact = contacts.find(({ id }) => {
-    if (id === contactId) return true;
-    return false;
-  });
-
-  if (foundContact) return foundContact;
+  if (contact) return contact;
 
   return null;
 }
 
 async function removeContact(contactId) {
-  const contacts = await listContacts();
+  const removedContact = await Contacts.findByIdAndDelete(contactId);
 
-  const foundContactIndex = contacts.findIndex(({ id }) => {
-    if (id === contactId) return true;
-    return false;
-  });
-
-  if (foundContactIndex < 0) return null;
-
-  const deletedContact = contacts.splice(foundContactIndex, 1);
-
-  const data = JSON.stringify(contacts);
-  await writeFile(contactsPath, data);
-
-  return deletedContact;
+  return removedContact;
 }
 
-async function addContact({ name, email, phone }) {
-  const contacts = await listContacts();
-  const newUser = {
-    id: uuidv4(),
-    name,
-    email,
-    phone,
-  };
-  contacts.push(newUser);
+async function addContact(newContactBody) {
+  const newContact = await Contacts.create(newContactBody);
 
-  const data = JSON.stringify(contacts);
-  await writeFile(contactsPath, data);
-
-  return newUser;
+  return newContact;
 }
 
 async function updateContact(contactId, newBody) {
-  const contacts = await listContacts();
-
-  const foundContactIndex = contacts.findIndex(({ id }) => {
-    if (id === contactId) return true;
-    return false;
+  const updatedContact = await Contacts.findByIdAndUpdate(contactId, newBody, {
+    new: true,
   });
-
-  if (foundContactIndex < 0) return null;
-
-  contacts[foundContactIndex] = { ...contacts[foundContactIndex], ...newBody };
-
-  const data = JSON.stringify(contacts);
-  await writeFile(contactsPath, data);
-
-  return contacts[foundContactIndex];
+  return updatedContact;
 }
 
 module.exports = {
-  contactsPath,
-  readFile,
-  writeFile,
   listContacts,
   getContactById,
   removeContact,

@@ -9,7 +9,7 @@ const contactsRouter = require("./routes/contactsRouter.js");
 
 mongoose
   .connect(serverConfig.mongoUri)
-  .then(() => console.log("MongoDB connected"))
+  .then(() => console.log("Database connection successful"))
   .catch((err) => {
     console.log(err);
     process.exit(1);

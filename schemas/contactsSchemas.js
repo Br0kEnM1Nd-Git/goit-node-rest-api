@@ -21,6 +21,9 @@ exports.createContactSchema = Joi.object({
     "string.max": `Phone should have a maximum length of {#limit}`,
     "any.required": `Phone is a required field`,
   }),
+  favorite: Joi.boolean().messages({
+    "boolean.base": `Favorite should be a type of 'boolean'`,
+  }),
 });
 
 exports.updateContactSchema = Joi.object({
@@ -40,6 +43,9 @@ exports.updateContactSchema = Joi.object({
     "string.empty": `Phone cannot be an empty field`,
     "string.min": `Phone should have a minimum length of {#limit}`,
     "string.max": `Phone should have a maximum length of {#limit}`,
+  }),
+  favorite: Joi.boolean().messages({
+    "boolean.base": `Favorite should be a type of 'boolean'`,
   }),
 })
   .min(1)

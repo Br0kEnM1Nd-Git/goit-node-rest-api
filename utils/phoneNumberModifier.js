@@ -3,7 +3,7 @@ const phoneNumberModifier = (phoneNumber) => {
   result.unshift("(");
   result.splice(4, 0, ") ");
   result.splice(8, 0, "-");
-  return result;
+  return result.join("");
 };
 
 module.exports = phoneNumberModifier;

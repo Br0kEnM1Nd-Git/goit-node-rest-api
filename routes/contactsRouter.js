@@ -11,7 +11,8 @@ const {
   createContactSchema,
   updateContactSchema,
 } = require("../schemas/contactsSchemas.js");
-const validateBody = require("../helpers/validateBody.js");
+const validateBody = require("../middlewares/validateBody.js");
+const validateId = require("../middlewares/validateId.js");
 
 const contactsRouter = express.Router();
 
@@ -20,6 +21,7 @@ contactsRouter
   .get(getAllContacts)
   .post(validateBody(createContactSchema), createContact);
 
+contactsRouter.use("/:id", validateId);
 contactsRouter
   .route("/:id")
   .get(getOneContact)

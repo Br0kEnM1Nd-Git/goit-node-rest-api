@@ -1,8 +1,5 @@
 const contactsService = require("../services/contactsServices.js");
-const {
-  createContactSchema,
-  updateContactSchema,
-} = require("../schemas/contactsSchemas.js");
+const phoneNumberModifier = require("../utils/phoneNumberModifier.js");
 
 exports.getAllContacts = async (req, res) => {
   const contacts = await contactsService.listContacts();
@@ -26,23 +23,20 @@ exports.deleteContact = async (req, res) => {
 };
 
 exports.createContact = async (req, res) => {
-  const { value: body, error } = createContactSchema.validate(req.body);
+  const newContactBody = {
+    ...req.body,
+    phone: phoneNumberModifier(req.body.phone),
+  };
 
-  if (error) return res.status(400).json({ message: error.message });
-
-  const newContact = await contactsService.addContact(body);
+  const newContact = await contactsService.addContact(newContactBody);
 
   res.status(201).json(newContact);
 };
 
 exports.updateContact = async (req, res) => {
-  const { value: body, error } = updateContactSchema.validate(req.body);
-
-  if (error) return res.status(400).json({ message: error.message });
-
   const updatedContact = await contactsService.updateContact(
     req.params.id,
-    body
+    req.body
   );
 
   if (!updatedContact) return res.status(404).json({ message: "Not found" });

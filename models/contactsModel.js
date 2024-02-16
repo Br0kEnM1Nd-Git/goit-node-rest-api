@@ -1,19 +1,16 @@
 const { model, Schema } = require("mongoose");
 
-const userSchema = new Schema(
+const contactsSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
     },
     phone: {
       type: String,
-      required: true,
     },
     favorite: {
       type: Boolean,
@@ -26,6 +23,6 @@ const userSchema = new Schema(
   }
 );
 
-const User = model("User", userSchema);
+const Contacts = model("Contacts", contactsSchema);
 
-module.exports = User;
+module.exports = Contacts;
