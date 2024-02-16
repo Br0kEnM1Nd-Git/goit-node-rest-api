@@ -1,10 +1,19 @@
+require("dotenv").config({ path: "./envs/.env" });
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-require("dotenv").config({ path: "./envs/.env" });
-const serverConfig = require("./configs/serverConfig.js");
+const mongoose = require("mongoose");
 
+const serverConfig = require("./configs/serverConfig.js");
 const contactsRouter = require("./routes/contactsRouter.js");
+
+mongoose
+  .connect(serverConfig.mongoUri)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
 
 const app = express();
 
@@ -19,7 +28,7 @@ app.use((_, res) => {
 });
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
+  const { status = 500, message = "Internal server error" } = err;
   res.status(status).json({ message });
 });
 
