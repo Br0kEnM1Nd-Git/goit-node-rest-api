@@ -1,6 +1,6 @@
-const contactsService = require("../services/contactsServices.js");
-const phoneNumberModifier = require("../utils/phoneNumberModifier.js");
-const catchAsync = require("../utils/catchAsync");
+const { contactsServices: contactsService } = require("../services");
+const { phoneNumberModifier } = require("../utils");
+const { catchAsync } = require("../utils");
 
 exports.getAllContacts = catchAsync(async (req, res) => {
   const contacts = await contactsService.listContacts();

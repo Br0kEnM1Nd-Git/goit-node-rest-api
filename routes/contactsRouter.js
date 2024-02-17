@@ -1,20 +1,24 @@
 const express = require("express");
 const {
-  getAllContacts,
-  getOneContact,
-  deleteContact,
-  createContact,
-  updateContact,
-  updateStatusContact,
-} = require("../controllers/contactsControllers.js");
+  contactsControllers: {
+    getAllContacts,
+    getOneContact,
+    deleteContact,
+    createContact,
+    updateContact,
+    updateStatusContact,
+  },
+} = require("../controllers");
 
 const {
-  createContactSchema,
-  updateContactSchema,
-  updateStatusContactSchema,
-} = require("../schemas/contactsSchemas.js");
-const validateBody = require("../middlewares/validateBody.js");
-const validateId = require("../middlewares/validateId.js");
+  contactsSchemas: {
+    createContactSchema,
+    updateContactSchema,
+    updateStatusContactSchema,
+  },
+} = require("../schemas");
+const { validateBody } = require("../middlewares");
+const { validateId } = require("../middlewares");
 
 const contactsRouter = express.Router();
 

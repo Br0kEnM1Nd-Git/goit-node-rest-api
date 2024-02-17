@@ -4,8 +4,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const serverConfig = require("./configs/serverConfig.js");
-const contactsRouter = require("./routes/contactsRouter.js");
+const { serverConfig } = require("./configs");
+const { contactsRouter } = require("./routes");
 
 mongoose
   .connect(serverConfig.mongoUri)
