@@ -7,4 +7,8 @@ const createUser = catchAsync(async (req, res) => {
   res.status(201).json({ email, subscription });
 });
 
-module.exports = { createUser };
+const loginUser = catchAsync(async (req, res) => {
+  res.send("Hello");
+});
+
+module.exports = { createUser, loginUser };

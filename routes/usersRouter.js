@@ -1,17 +1,27 @@
 const express = require("express");
 const {
-  usersControllers: {createUser},
+  usersControllers: { createUser, loginUser },
 } = require("../controllers");
 
 const {
-  usersSchemas: { createUserSchema },
+  usersSchemas: { authUserSchema },
 } = require("../schemas");
 
 const { usersMiddleware } = require("../middlewares");
 
 const usersRouter = express.Router();
 
-usersRouter.post("/register", usersMiddleware.validateBody(createUserSchema), createUser);
+usersRouter.post(
+  "/register",
+  usersMiddleware.validateBody(authUserSchema),
+  createUser
+);
+
+usersRouter.post(
+  "/login",
+  usersMiddleware.validateBody(authUserSchema),
+  loginUser
+);
 
 // usersRouter
 //   .route("/")

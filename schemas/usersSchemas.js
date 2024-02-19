@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const { SUBSCRIPTION_PLANS } = require("../constants/usersConstants");
 
-exports.createUserSchema = Joi.object({
+exports.authUserSchema = Joi.object({
   password: Joi.string().empty().min(4).max(24).required().messages({
     "string.base": `Password should be a type of 'text'`,
     "string.empty": `Password cannot be an empty field`,
