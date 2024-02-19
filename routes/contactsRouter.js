@@ -17,25 +17,27 @@ const {
     updateStatusContactSchema,
   },
 } = require("../schemas");
-const { validateBody } = require("../middlewares");
-const { validateId } = require("../middlewares");
+const { contactsMiddleware } = require("../middlewares");
 
 const contactsRouter = express.Router();
 
 contactsRouter
   .route("/")
   .get(getAllContacts)
-  .post(validateBody(createContactSchema), createContact);
+  .post(contactsMiddleware.validateBody(createContactSchema), createContact);
 
-contactsRouter.use("/:id", validateId);
+contactsRouter.use("/:id", contactsMiddleware.validateId);
 contactsRouter
   .route("/:id")
   .get(getOneContact)
   .delete(deleteContact)
-  .put(validateBody(updateContactSchema), updateContact);
+  .put(contactsMiddleware.validateBody(updateContactSchema), updateContact);
 
 contactsRouter
   .route("/:id/favorite")
-  .patch(validateBody(updateStatusContactSchema), updateStatusContact);
+  .patch(
+    contactsMiddleware.validateBody(updateStatusContactSchema),
+    updateStatusContact
+  );
 
 module.exports = contactsRouter;
