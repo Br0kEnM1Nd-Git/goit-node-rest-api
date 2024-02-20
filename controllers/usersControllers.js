@@ -8,7 +8,9 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const loginUser = catchAsync(async (req, res) => {
-  res.send("Hello");
+  const authData = await usersService.loginUser(req.body);
+
+  res.status(200).json(authData);
 });
 
 module.exports = { createUser, loginUser };

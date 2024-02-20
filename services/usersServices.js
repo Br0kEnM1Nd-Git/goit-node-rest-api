@@ -1,6 +1,7 @@
+const bcrypt = require("bcrypt");
 const { usersModel: Users } = require("../models");
 const { HttpError } = require("../helpers");
-const bcrypt = require("bcrypt");
+const { jwtServices } = require("../utils");
 
 async function registerUser(newUserBody) {
   const isUserExists = await Users.exists({ email: newUserBody.email });
@@ -12,4 +13,31 @@ async function registerUser(newUserBody) {
   return Users.create(newUserBody);
 }
 
-module.exports = { registerUser };
+async function loginUser(loginData) {
+  const foundUser = await Users.findOne({
+    email: loginData.email,
+  });
+
+  if (!foundUser) throw HttpError(401, "Email or password is wrong");
+
+  const { password: passwordHash, email, subscription, id } = foundUser;
+
+  const isPasswordValid = await bcrypt.compare(
+    loginData.password,
+    passwordHash
+  );
+
+  if (!isPasswordValid) throw HttpError(401, "Email or password is wrong");
+
+  const token = jwtServices.signToken(id);
+
+  return {
+    token,
+    user: {
+      email,
+      subscription,
+    },
+  };
+}
+
+module.exports = { registerUser, loginUser };
