@@ -1,10 +1,16 @@
 const express = require("express");
 const {
-  usersControllers: { createUser, loginUser, logoutUser, getCurrentUser },
+  usersControllers: {
+    createUser,
+    loginUser,
+    logoutUser,
+    getCurrentUser,
+    changeUserPlan,
+  },
 } = require("../controllers");
 
 const {
-  usersSchemas: { authUserSchema },
+  usersSchemas: { authUserSchema, changePlanUserSchema },
 } = require("../schemas");
 
 const { usersMiddleware, authMiddleware } = require("../middlewares");
@@ -24,7 +30,13 @@ usersRouter.post(
 );
 
 usersRouter.use(authMiddleware.protect);
+
 usersRouter.post("/logout", logoutUser);
 usersRouter.get("/current", getCurrentUser);
+usersRouter.patch(
+  "/",
+  usersMiddleware.validateBody(changePlanUserSchema),
+  changeUserPlan
+);
 
 module.exports = usersRouter;

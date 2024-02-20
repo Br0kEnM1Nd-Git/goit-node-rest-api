@@ -25,4 +25,19 @@ const getCurrentUser = (req, res) => {
   res.status(200).json({ email, subscription });
 };
 
-module.exports = { createUser, loginUser, logoutUser, getCurrentUser };
+const changeUserPlan = catchAsync(async (req, res) => {
+  const { email, subscription } = await usersService.changeUserPlan(
+    req.user.id,
+    req.body.plan
+  );
+
+  res.status(200).json({ email, subscription });
+});
+
+module.exports = {
+  createUser,
+  loginUser,
+  logoutUser,
+  getCurrentUser,
+  changeUserPlan,
+};

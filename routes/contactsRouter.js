@@ -16,6 +16,7 @@ const {
     updateContactSchema,
     updateStatusContactSchema,
   },
+  querySchemas: { contactsQuerySchema },
 } = require("../schemas");
 const { contactsMiddleware, authMiddleware } = require("../middlewares");
 
@@ -25,7 +26,7 @@ contactsRouter.use(authMiddleware.protect);
 
 contactsRouter
   .route("/")
-  .get(getAllContacts)
+  .get(contactsMiddleware.validateQuery(contactsQuerySchema), getAllContacts)
   .post(contactsMiddleware.validateBody(createContactSchema), createContact);
 
 contactsRouter.use("/:id", contactsMiddleware.validateId);

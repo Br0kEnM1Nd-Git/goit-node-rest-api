@@ -42,8 +42,16 @@ async function loginUser(loginData) {
   };
 }
 
-async function logoutUser(id) {
-  await Users.findByIdAndUpdate(id, { token: null });
+async function logoutUser(userId) {
+  await Users.findByIdAndUpdate(userId, { token: null });
 }
 
-module.exports = { registerUser, loginUser, logoutUser };
+async function changeUserPlan(userId, newPlan) {
+  return Users.findByIdAndUpdate(
+    userId,
+    { subscription: newPlan },
+    { new: true }
+  );
+}
+
+module.exports = { registerUser, loginUser, logoutUser, changeUserPlan };

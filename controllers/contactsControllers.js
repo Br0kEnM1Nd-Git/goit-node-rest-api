@@ -3,8 +3,9 @@ const { phoneNumberModifier } = require("../utils");
 const { catchAsync } = require("../utils");
 
 exports.getAllContacts = catchAsync(async (req, res) => {
-  const contacts = await contactsService.listContacts();
-  res.status(200).json(contacts);
+  const data = await contactsService.listContacts(req.user.id, req.query);
+
+  res.status(200).json(data);
 });
 
 exports.getOneContact = catchAsync(async (req, res) => {
@@ -27,6 +28,7 @@ exports.createContact = catchAsync(async (req, res) => {
   const newContactBody = {
     ...req.body,
     phone: phoneNumberModifier(req.body.phone),
+    owner: req.user.id,
   };
 
   const newContact = await contactsService.addContact(newContactBody);
