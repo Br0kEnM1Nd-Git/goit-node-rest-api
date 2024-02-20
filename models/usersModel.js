@@ -1,5 +1,7 @@
 const { model, Schema } = require("mongoose");
-const { SUBSCRIPTION_PLANS } = require("../constants/usersConstants");
+const {
+  usersConstants: { SUBSCRIPTION_PLANS },
+} = require("../constants/");
 
 const usersSchema = new Schema(
   {
