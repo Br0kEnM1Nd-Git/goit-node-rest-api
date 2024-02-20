@@ -31,6 +31,8 @@ async function loginUser(loginData) {
 
   const token = jwtServices.signToken(id);
 
+  await Users.findByIdAndUpdate(id, { token });
+
   return {
     token,
     user: {

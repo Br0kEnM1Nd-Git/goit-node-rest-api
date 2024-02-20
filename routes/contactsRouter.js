@@ -17,9 +17,11 @@ const {
     updateStatusContactSchema,
   },
 } = require("../schemas");
-const { contactsMiddleware } = require("../middlewares");
+const { contactsMiddleware, authMiddleware } = require("../middlewares");
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authMiddleware.protect);
 
 contactsRouter
   .route("/")

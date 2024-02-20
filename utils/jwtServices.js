@@ -8,14 +8,14 @@ const signToken = (id) =>
   });
 
 const checkToken = (token) => {
-  if (!token) throw new HttpError(401, "Not logged in..");
+  if (!token) throw HttpError(401, "Not authorized");
 
   try {
     const { id } = jwt.verify(token, serverConfig.jwtSecret);
 
     return id;
   } catch (err) {
-    throw new HttpError(401, "Not logged in..");
+    throw HttpError(401, "Not authorized");
   }
 };
 
