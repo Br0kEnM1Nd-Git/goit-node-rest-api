@@ -1,10 +1,12 @@
+const { HttpError } = require("../helpers");
 const { contactsServices: contactsService } = require("../services");
 const { phoneNumberModifier } = require("../utils");
 const { catchAsync } = require("../utils");
 
 exports.getAllContacts = catchAsync(async (req, res) => {
-  const contacts = await contactsService.listContacts();
-  res.status(200).json(contacts);
+  const data = await contactsService.listContacts(req.user.id, req.query);
+
+  res.status(200).json(data);
 });
 
 exports.getOneContact = catchAsync(async (req, res) => {
@@ -12,7 +14,7 @@ exports.getOneContact = catchAsync(async (req, res) => {
 
   if (contact) return res.status(200).json(contact);
 
-  res.status(404).send({ message: "Not found" });
+  throw HttpError(404, "Not found");
 });
 
 exports.deleteContact = catchAsync(async (req, res) => {
@@ -27,6 +29,7 @@ exports.createContact = catchAsync(async (req, res) => {
   const newContactBody = {
     ...req.body,
     phone: phoneNumberModifier(req.body.phone),
+    owner: req.user.id,
   };
 
   const newContact = await contactsService.addContact(newContactBody);
@@ -51,7 +54,7 @@ exports.updateStatusContact = catchAsync(async (req, res) => {
     req.body
   );
 
-  if (!updatedContact) return res.status(404).json({ message: "Not found" });
+  if (!updatedContact) throw HttpError(404, "Not found");
 
   res.status(200).json(updatedContact);
 });
