@@ -54,7 +54,7 @@ exports.updateStatusContact = catchAsync(async (req, res) => {
     req.body
   );
 
-  if (!updatedContact) return res.status(404).json({ message: "Not found" });
+  if (!updatedContact) return HttpError(404, "Not found");
 
   res.status(200).json(updatedContact);
 });
