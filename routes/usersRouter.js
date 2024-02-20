@@ -1,13 +1,13 @@
 const express = require("express");
 const {
-  usersControllers: { createUser, loginUser },
+  usersControllers: { createUser, loginUser, logoutUser, getCurrentUser },
 } = require("../controllers");
 
 const {
   usersSchemas: { authUserSchema },
 } = require("../schemas");
 
-const { usersMiddleware } = require("../middlewares");
+const { usersMiddleware, authMiddleware } = require("../middlewares");
 
 const usersRouter = express.Router();
 
@@ -23,23 +23,8 @@ usersRouter.post(
   loginUser
 );
 
-// usersRouter
-//   .route("/")
-//   .get(getAllContacts)
-//   .post(contactsMiddleware.validateBody(createContactSchema), createContact);
-
-// usersRouter.use("/:id", contactsMiddleware.validateId);
-// usersRouter
-//   .route("/:id")
-//   .get(getOneContact)
-//   .delete(deleteContact)
-//   .put(contactsMiddleware.validateBody(updateContactSchema), updateContact);
-
-// usersRouter
-//   .route("/:id/favorite")
-//   .patch(
-//     contactsMiddleware.validateBody(updateStatusContactSchema),
-//     updateStatusContact
-//   );
+usersRouter.use(authMiddleware.protect);
+usersRouter.post("/logout", logoutUser);
+usersRouter.get("/current", getCurrentUser);
 
 module.exports = usersRouter;

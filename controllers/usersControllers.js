@@ -13,4 +13,16 @@ const loginUser = catchAsync(async (req, res) => {
   res.status(200).json(authData);
 });
 
-module.exports = { createUser, loginUser };
+const logoutUser = catchAsync(async (req, res) => {
+  await usersService.logoutUser(req.user.id);
+
+  res.sendStatus(204);
+});
+
+const getCurrentUser = (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.status(200).json({ email, subscription });
+};
+
+module.exports = { createUser, loginUser, logoutUser, getCurrentUser };

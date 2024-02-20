@@ -42,4 +42,8 @@ async function loginUser(loginData) {
   };
 }
 
-module.exports = { registerUser, loginUser };
+async function logoutUser(id) {
+  await Users.findByIdAndUpdate(id, { token: null });
+}
+
+module.exports = { registerUser, loginUser, logoutUser };
