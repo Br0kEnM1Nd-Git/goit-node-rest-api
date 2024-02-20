@@ -1,3 +1,4 @@
+const { HttpError } = require("../helpers");
 const { contactsServices: contactsService } = require("../services");
 const { phoneNumberModifier } = require("../utils");
 const { catchAsync } = require("../utils");
@@ -13,7 +14,7 @@ exports.getOneContact = catchAsync(async (req, res) => {
 
   if (contact) return res.status(200).json(contact);
 
-  res.status(404).send({ message: "Not found" });
+  throw HttpError(404, "Not found");
 });
 
 exports.deleteContact = catchAsync(async (req, res) => {
