@@ -5,7 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const { serverConfig } = require("./configs");
-const { contactsRouter } = require("./routes");
+const { contactsRouter, usersRouter } = require("./routes");
 
 mongoose
   .connect(serverConfig.mongoUri)
@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
+app.use("/users", usersRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
