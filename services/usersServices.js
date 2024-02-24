@@ -78,8 +78,6 @@ async function changeUserAvatar(file, userId) {
       .write(path.join("public", "avatars", `${filename}.jpg`));
   });
 
-  await fs.unlink(path.join(file.destination, file.filename));
-
   const { avatarURL } = await Users.findByIdAndUpdate(
     userId,
     {
