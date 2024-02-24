@@ -1,5 +1,6 @@
 const { catchAsync } = require("../utils");
 const { usersServices: usersService } = require("../services");
+const { HttpError } = require("../helpers");
 
 const createUser = catchAsync(async (req, res) => {
   const { email, subscription } = await usersService.registerUser(req.body);
@@ -34,10 +35,19 @@ const changeUserPlan = catchAsync(async (req, res) => {
   res.status(200).json({ email, subscription });
 });
 
+const changeUserAvatar = catchAsync(async (req, res) => {
+  if (!req.file) throw HttpError(400, "No image recieved");
+
+  const avatarURL = await usersService.changeUserAvatar(req.file, req.user.id);
+
+  res.status(200).json({ avatarURL });
+});
+
 module.exports = {
   createUser,
   loginUser,
   logoutUser,
   getCurrentUser,
   changeUserPlan,
+  changeUserAvatar,
 };

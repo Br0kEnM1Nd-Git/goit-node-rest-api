@@ -6,6 +6,7 @@ const {
     logoutUser,
     getCurrentUser,
     changeUserPlan,
+    changeUserAvatar,
   },
 } = require("../controllers");
 
@@ -38,5 +39,6 @@ usersRouter.patch(
   usersMiddleware.validateBody(changePlanUserSchema),
   changeUserPlan
 );
+usersRouter.patch("/avatars", usersMiddleware.uploadAvatar, changeUserAvatar);
 
 module.exports = usersRouter;
