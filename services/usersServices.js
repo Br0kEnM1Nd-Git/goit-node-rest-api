@@ -3,12 +3,14 @@ const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
+const { v4 } = require("uuid");
 const { usersModel: Users } = require("../models");
 const { HttpError } = require("../helpers");
 const { jwtServices } = require("../utils");
 const {
   usersConstants: { AVATARS_URL },
 } = require("../constants");
+const EmailServices = require("./emailServices");
 
 async function registerUser(newUserBody) {
   const isUserExists = await Users.exists({ email: newUserBody.email });
@@ -23,6 +25,13 @@ async function registerUser(newUserBody) {
     true
   );
 
+  newUserBody.verificationToken = v4();
+
+  await EmailServices.sendEmailVerification(
+    newUserBody.email,
+    newUserBody.verificationToken
+  );
+
   return Users.create(newUserBody);
 }
 
@@ -32,6 +41,8 @@ async function loginUser(loginData) {
   });
 
   if (!foundUser) throw HttpError(401, "Email or password is wrong");
+
+  if (!foundUser.verify) throw HttpError(401, "Email is not verified");
 
   const { password: passwordHash, email, subscription, id } = foundUser;
 
@@ -91,10 +102,33 @@ async function changeUserAvatar(file, userId) {
   return avatarURL;
 }
 
+async function verifyUserEmail(verificationToken) {
+  const [foundUser] = await Users.find({ verificationToken });
+
+  if (!foundUser) throw HttpError(404, "User not found");
+
+  await Users.findByIdAndUpdate(foundUser.id, {
+    verificationToken: null,
+    verify: true,
+  });
+}
+
+async function resentUserEmailVerification(email) {
+  const [{ verificationToken, verify }] = await Users.find({ email });
+
+  if (!verificationToken && !verify) return;
+
+  if (verify) throw HttpError(400, "Verification has already been passed");
+
+  await EmailServices.sendEmailVerification(email, verificationToken);
+}
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   changeUserPlan,
   changeUserAvatar,
+  verifyUserEmail,
+  resentUserEmailVerification,
 };

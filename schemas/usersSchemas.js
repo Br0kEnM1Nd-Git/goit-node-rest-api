@@ -29,3 +29,12 @@ exports.changePlanUserSchema = Joi.object({
       "any.required": `Plan is a required field`,
     }),
 });
+
+exports.resentUserEmailVerificationSchema = Joi.object({
+  email: Joi.string().empty().email().required().messages({
+    "string.base": `Email should be a type of 'text'`,
+    "string.empty": `Email cannot be an empty field`,
+    "string.email": `Email is not avaiable`,
+    "any.required": `Email is a required field`,
+  }),
+});

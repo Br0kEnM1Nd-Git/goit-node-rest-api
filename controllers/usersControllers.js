@@ -43,6 +43,18 @@ const changeUserAvatar = catchAsync(async (req, res) => {
   res.status(200).json({ avatarURL });
 });
 
+const verifyUserEmail = catchAsync(async (req, res) => {
+  await usersService.verifyUserEmail(req.params.verificationToken);
+
+  res.status(200).json({ message: "Verification successful" });
+});
+
+const resentUserEmailVerification = catchAsync(async (req, res) => {
+  await usersService.resentUserEmailVerification(req.body.email);
+
+  res.status(200).json({ message: "Verification email sent" });
+});
+
 module.exports = {
   createUser,
   loginUser,
@@ -50,4 +62,6 @@ module.exports = {
   getCurrentUser,
   changeUserPlan,
   changeUserAvatar,
+  verifyUserEmail,
+  resentUserEmailVerification,
 };

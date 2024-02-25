@@ -7,11 +7,17 @@ const {
     getCurrentUser,
     changeUserPlan,
     changeUserAvatar,
+    verifyUserEmail,
+    resentUserEmailVerification,
   },
 } = require("../controllers");
 
 const {
-  usersSchemas: { authUserSchema, changePlanUserSchema },
+  usersSchemas: {
+    authUserSchema,
+    changePlanUserSchema,
+    resentUserEmailVerificationSchema,
+  },
 } = require("../schemas");
 
 const { usersMiddleware, authMiddleware } = require("../middlewares");
@@ -23,6 +29,12 @@ usersRouter.post(
   usersMiddleware.validateBody(authUserSchema),
   createUser
 );
+usersRouter.post(
+  "/verify",
+  usersMiddleware.validateBody(resentUserEmailVerificationSchema),
+  resentUserEmailVerification
+);
+usersRouter.get("/verify/:verificationToken", verifyUserEmail);
 
 usersRouter.post(
   "/login",
